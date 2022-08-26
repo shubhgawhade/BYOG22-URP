@@ -28,12 +28,7 @@ public class PlayerMovement : MonoBehaviour
         
         Vector3 velocity = new Vector3(horizontalInput, 0, verticalInput);
         velocity.Normalize();
-        
-        if (Input.GetKey(KeyCode.LeftShift))
-        {
-            velocity *= 2f;
-        }
-        
+
         velocity *= moveSpeed * Time.fixedDeltaTime;
         Vector3 dir = transform.rotation * velocity;
         
