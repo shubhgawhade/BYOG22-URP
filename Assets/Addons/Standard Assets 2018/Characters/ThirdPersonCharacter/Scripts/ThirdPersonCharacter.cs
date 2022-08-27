@@ -8,6 +8,11 @@ namespace UnityStandardAssets.Characters.ThirdPerson
 	[RequireComponent(typeof(Animator))]
 	public class ThirdPersonCharacter : MonoBehaviour
 	{
+		[SerializeField] private SkinnedMeshRenderer Leye;
+		[SerializeField] private SkinnedMeshRenderer Reye;
+		[SerializeField] private Material redEyes;
+		private Material oldMat;
+		
 		[SerializeField] private GameObject player;
 		[SerializeField] private GameObject spotLight;
 		private SpotlightController slc;
@@ -44,6 +49,11 @@ namespace UnityStandardAssets.Characters.ThirdPerson
 
 		void Start()
 		{
+			if (gameObject.CompareTag("Enemy"))
+			{
+				oldMat = Leye.GetComponent<SkinnedMeshRenderer>().material;
+			}
+			
 			slc = spotLight.GetComponent<SpotlightController>();
 			
 			m_Animator = GetComponent<Animator>();
@@ -64,6 +74,8 @@ namespace UnityStandardAssets.Characters.ThirdPerson
 
 				if (Mathf.Abs(dir.magnitude) > maxPlayerDistance && detected)
 				{
+					Leye.material = oldMat;
+					Reye.material = oldMat;
 					detected = false;
 				}
 				else if (slc.isOn && Mathf.Abs(dir.magnitude) < chargeDistance)
@@ -76,6 +88,8 @@ namespace UnityStandardAssets.Characters.ThirdPerson
 						
 						if (Vector3.Dot(player.transform.forward.normalized, dir.normalized) > 0.9f)
 						{
+							Leye.material = redEyes;
+							Reye.material = redEyes;
 							detected = true;
 						}
 					}
