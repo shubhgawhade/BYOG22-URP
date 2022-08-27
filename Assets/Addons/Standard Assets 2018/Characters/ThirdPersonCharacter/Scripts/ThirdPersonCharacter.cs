@@ -1,3 +1,4 @@
+using System;
 using UnityEngine;
 
 namespace UnityStandardAssets.Characters.ThirdPerson
@@ -7,6 +8,15 @@ namespace UnityStandardAssets.Characters.ThirdPerson
 	[RequireComponent(typeof(Animator))]
 	public class ThirdPersonCharacter : MonoBehaviour
 	{
+		[SerializeField] private GameObject player;
+		[SerializeField] private GameObject spotLight;
+		private SpotlightController slc;
+
+		public float maxPlayerDistance;
+		public float chargeDistance;
+		
+		public bool detected;
+		
 		[SerializeField] float m_MovingTurnSpeed = 360;
 		[SerializeField] float m_StationaryTurnSpeed = 180;
 		[SerializeField] float m_JumpPower = 12f;
@@ -28,10 +38,14 @@ namespace UnityStandardAssets.Characters.ThirdPerson
 		Vector3 m_CapsuleCenter;
 		CapsuleCollider m_Capsule;
 		bool m_Crouching;
-
+		
+		private Ray ray;
+		private RaycastHit hit;
 
 		void Start()
 		{
+			slc = spotLight.GetComponent<SpotlightController>();
+			
 			m_Animator = GetComponent<Animator>();
 			m_Rigidbody = GetComponent<Rigidbody>();
 			m_Capsule = GetComponent<CapsuleCollider>();
@@ -40,6 +54,30 @@ namespace UnityStandardAssets.Characters.ThirdPerson
 
 			m_Rigidbody.constraints = RigidbodyConstraints.FreezeRotationX | RigidbodyConstraints.FreezeRotationY | RigidbodyConstraints.FreezeRotationZ;
 			m_OrigGroundCheckDistance = m_GroundCheckDistance;
+		}
+
+		private void Update()
+		{
+			Vector3 dir = transform.position - player.transform.position;
+
+			if (Mathf.Abs(dir.magnitude) > maxPlayerDistance && detected)
+			{
+				detected = false;
+			}
+			else if (slc.isOn && Mathf.Abs(dir.magnitude) < chargeDistance)
+			{
+				print("SPOTLIGHT : " + slc.isOn);
+				
+				if (Physics.Raycast(transform.position, player.transform.position, out hit))
+				{
+					print("LOOK DIR : " + Vector3.Dot(player.transform.forward.normalized, dir.normalized));
+					
+					if (Vector3.Dot(player.transform.forward.normalized, dir.normalized) > 0.9f)
+					{
+						detected = true;
+					}
+				}
+			}
 		}
 
 
@@ -54,7 +92,16 @@ namespace UnityStandardAssets.Characters.ThirdPerson
 			CheckGroundStatus();
 			move = Vector3.ProjectOnPlane(move, m_GroundNormal);
 			m_TurnAmount = Mathf.Atan2(move.x, move.z);
-			m_ForwardAmount = move.z;
+
+			if (detected)
+			{
+				m_ForwardAmount = move.z;
+			}
+			else
+			{
+				m_ForwardAmount = Mathf.Clamp(move.z, 0, 0.5f);
+			}
+			
 
 			ApplyExtraTurnRotation();
 
