@@ -20,7 +20,7 @@ public class Door : MonoBehaviour {
 		distance = Vector3.Distance(transform.position, player.transform.position);
 		ray = Camera.main.ScreenPointToRay(Input.mousePosition);
 		RaycastHit hit;
-			if (Input.GetButtonDown ("Fire1") && distance < 2 && Physics.Raycast (ray, out hit) && hit.collider.gameObject.tag == "Door") {
+			if (distance < 4 && Physics.Raycast (ray, out hit) && hit.collider.gameObject.tag == "Door") {
 				gameObject.GetComponent<Animation> ().Play ("DoorOpen");
 				opened = true;
 			}
@@ -30,7 +30,7 @@ public class Door : MonoBehaviour {
 			distance = Vector3.Distance(transform.position, player.transform.position);
 			ray = Camera.main.ScreenPointToRay(Input.mousePosition);
 			RaycastHit hit;
-			if (Input.GetButtonDown ("Fire1") && distance < 2 && Physics.Raycast (ray, out hit) && hit.collider.gameObject.tag == "Door") {
+			if (distance > 2 && Physics.Raycast (ray, out hit) && hit.collider.gameObject.tag == "Door") {
 				gameObject.GetComponent<Animation> ().Play ("DoorClose");
 				opened = false;
 			}
