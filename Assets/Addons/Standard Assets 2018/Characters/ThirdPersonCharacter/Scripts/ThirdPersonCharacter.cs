@@ -58,23 +58,26 @@ namespace UnityStandardAssets.Characters.ThirdPerson
 
 		private void Update()
 		{
-			Vector3 dir = transform.position - player.transform.position;
+			if (gameObject.CompareTag("Enemy"))
+			{
+				Vector3 dir = transform.position - player.transform.position;
 
-			if (Mathf.Abs(dir.magnitude) > maxPlayerDistance && detected)
-			{
-				detected = false;
-			}
-			else if (slc.isOn && Mathf.Abs(dir.magnitude) < chargeDistance)
-			{
-				print("SPOTLIGHT : " + slc.isOn);
-				
-				if (Physics.Raycast(transform.position, player.transform.position, out hit))
+				if (Mathf.Abs(dir.magnitude) > maxPlayerDistance && detected)
 				{
-					print("LOOK DIR : " + Vector3.Dot(player.transform.forward.normalized, dir.normalized));
+					detected = false;
+				}
+				else if (slc.isOn && Mathf.Abs(dir.magnitude) < chargeDistance)
+				{
+					print("SPOTLIGHT : " + slc.isOn);
 					
-					if (Vector3.Dot(player.transform.forward.normalized, dir.normalized) > 0.9f)
+					if (Physics.Raycast(transform.position, player.transform.position, out hit))
 					{
-						detected = true;
+						print("LOOK DIR : " + Vector3.Dot(player.transform.forward.normalized, dir.normalized));
+						
+						if (Vector3.Dot(player.transform.forward.normalized, dir.normalized) > 0.9f)
+						{
+							detected = true;
+						}
 					}
 				}
 			}
