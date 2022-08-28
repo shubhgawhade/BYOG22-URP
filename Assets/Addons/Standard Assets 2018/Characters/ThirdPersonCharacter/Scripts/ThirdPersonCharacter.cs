@@ -108,7 +108,6 @@ namespace UnityStandardAssets.Characters.ThirdPerson
 				{
 					m_Animator.SetBool("Attack", true);
 					
-					// SUBTRACT PLAYER HEALTH HERE
 					StartCoroutine(Wait(0));
 				}
 			}
