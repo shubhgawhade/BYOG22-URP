@@ -1,11 +1,15 @@
 using System;
 using System.Collections;
-using System.Collections.Generic;
+using TMPro;
 using UnityEngine;
 using UnityStandardAssets.Characters.ThirdPerson;
 
 public class Shoot : MonoBehaviour
 {
+    [SerializeField] private TextMeshProUGUI bulletUI;
+
+    private int bullets = 6;
+    
     [SerializeField] private GameObject muzzleFlash;
     [SerializeField] private GameObject bloodEffect;
  
@@ -28,7 +32,9 @@ public class Shoot : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if (Input.GetMouseButtonDown(0) && !cd)
+        bulletUI.text = bullets.ToString();
+        
+        if (Input.GetMouseButtonDown(0) && !cd && bullets > 0)
         {
             muzzleFlash.SetActive(true);
             audSource.PlayOneShot(shot);
@@ -44,6 +50,8 @@ public class Shoot : MonoBehaviour
 
     private void ShootBullet()
     {
+        bullets--;
+        
         RaycastHit hit;
         if (Physics.Raycast(cam.transform.position, cam.transform.forward, out hit))
         {
@@ -56,6 +64,11 @@ public class Shoot : MonoBehaviour
             {
                 hit.collider.GetComponent<ThirdPersonCharacter>().ded = true;
                 Instantiate(bloodEffect, hit.point, Quaternion.Euler(hit.normal));
+
+                if (hit.collider.CompareTag("Enemy") && bullets < 5)
+                {
+                    bullets += 2;
+                }
             }
             else
             {
