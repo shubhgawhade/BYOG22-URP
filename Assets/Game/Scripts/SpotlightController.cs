@@ -1,10 +1,14 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 using UnityStandardAssets.Characters.ThirdPerson;
 
 public class SpotlightController : MonoBehaviour
 {
+    [SerializeField] Slider torchBatteryUI;
+    [SerializeField] private Image sliderColour;
+
     public bool isOn;
     public bool cooldown;
 
@@ -64,6 +68,9 @@ public class SpotlightController : MonoBehaviour
                 battery = 100;
             }
         }
+
+        torchBatteryUI.value = battery;
+        sliderColour.color = Color.Lerp(Color.red, Color.yellow, battery / 100);
     }
 
     private void ToggleSpotlight()
