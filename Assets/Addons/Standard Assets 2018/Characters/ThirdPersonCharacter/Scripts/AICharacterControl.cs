@@ -75,6 +75,7 @@ namespace UnityStandardAssets.Characters.ThirdPerson
                     }
                     else
                     {
+                        aic.player.GetComponent<PlayerHealth>().SubtractHealth();
                         cooldown = true;
                         target = transform;
 
