@@ -58,6 +58,7 @@ namespace UnityStandardAssets.Characters.ThirdPerson
 
             if (tpc.ded)
             {
+                GetComponent<CapsuleCollider>().enabled = false;
                 target = transform;
             }
             else
@@ -94,7 +95,7 @@ namespace UnityStandardAssets.Characters.ThirdPerson
             }
             else
             {
-                if (!cooldown)
+                if (!cooldown && !tpc.ded)
                 {
                     patrol = false;
                     SetTarget(aic.player.transform);

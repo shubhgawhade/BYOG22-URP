@@ -7,7 +7,8 @@ using UnityStandardAssets.Characters.ThirdPerson;
 public class Shoot : MonoBehaviour
 {
     [SerializeField] private GameObject muzzleFlash;
-
+    [SerializeField] private GameObject bloodEffect;
+ 
     [SerializeField] private AudioClip shot;
     
     private Animator anim;
@@ -36,7 +37,8 @@ public class Shoot : MonoBehaviour
 
             ShootBullet();
 
-            StartCoroutine(A());
+            StartCoroutine(A(0));
+            StartCoroutine(A(1));
         }
     }
 
@@ -46,13 +48,14 @@ public class Shoot : MonoBehaviour
         if (Physics.Raycast(cam.transform.position, cam.transform.forward, out hit))
         {
             //Instantiate bullet holes if not enemy
-            // if enemy instantiate bool
+            // if enemy instantiate blood
             
-            //Instantiate(muzzleFlash, hit.point, Quaternion.Euler(hit.normal));
+            // Instantiate(muzzleFlash, hit.point, Quaternion.Euler(hit.normal));
             
-            if (hit.collider.CompareTag("Enemy"))
+            if (hit.collider.CompareTag("Enemy") || hit.collider.CompareTag("Civilian"))
             {
                 hit.collider.GetComponent<ThirdPersonCharacter>().ded = true;
+                Instantiate(bloodEffect, hit.point, Quaternion.Euler(hit.normal));
             }
             else
             {
@@ -60,11 +63,25 @@ public class Shoot : MonoBehaviour
         }
     }
 
-    IEnumerator A()
+    IEnumerator A(int a)
     {
-        yield return new WaitForSeconds(0.8f);
+        switch (a)
+        {
+            case 0:
+                
+                yield return new WaitForSeconds(0.2f);
+                anim.SetBool("Shoot", false);
+                
+                break;
             
-        anim.SetBool("Shoot", false);
-        cd = false;
+            
+            case 1 :
+                
+                yield return new WaitForSeconds(0.8f);
+                cd = false;
+                
+                break;
+        }
+            
     }
 }
