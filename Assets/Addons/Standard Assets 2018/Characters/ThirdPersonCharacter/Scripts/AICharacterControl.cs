@@ -56,40 +56,38 @@ namespace UnityStandardAssets.Characters.ThirdPerson
                 ChooseTarget();
             }
 
-            if (Mathf.Abs((transform.position - target.transform.position).magnitude) > 2f)
+            if (tpc.ded)
             {
-                character.Move(agent.desiredVelocity, false, false);
-            }
-            else if (Mathf.Abs((transform.position - target.transform.position).magnitude) > 0.1f && target.gameObject == aic.player)
-            {
-                if (!anim.GetBool("Attack") && !cooldown)
-                {
-                    character.Move(agent.desiredVelocity, false, false);
-                }
-                else
-                {
-                    cooldown = true;
-                    target = transform;
-
-                    StartCoroutine(A());
-                }
+                target = transform;
             }
             else
             {
-                character.Move(Vector3.zero, false, false);
-                patrol = false;
-                ChooseTarget();
+                if (Mathf.Abs((transform.position - target.transform.position).magnitude) > 2f)
+                {
+                    character.Move(agent.desiredVelocity, false, false);
+                }
+                else if (Mathf.Abs((transform.position - target.transform.position).magnitude) > 0.1f && target.gameObject == aic.player)
+                {
+                    if (!anim.GetBool("Attack") && !cooldown)
+                    {
+                        character.Move(agent.desiredVelocity, false, false);
+                    }
+                    else
+                    {
+                        cooldown = true;
+                        target = transform;
+
+                        StartCoroutine(A());
+                    }
+                }
+                else
+                {
+                    character.Move(Vector3.zero, false, false);
+                    patrol = false;
+                    ChooseTarget();
+                }
             }
 
-
-            IEnumerator A()
-            {
-                yield return new WaitForSeconds(1.5f);
-
-                cooldown = false;
-            }
-            
-            
             if (!tpc.detected)
             {
                 ChooseTarget();
@@ -103,10 +101,16 @@ namespace UnityStandardAssets.Characters.ThirdPerson
                 }
             }
         }
+        
+        IEnumerator A()
+        {
+            yield return new WaitForSeconds(1.5f);
 
+            cooldown = false;
+        }
         private void ChooseTarget()
         {
-            if (!patrol && !cooldown)
+            if (!patrol && !cooldown && !tpc.ded)
             {
                 do
                 {

@@ -8,12 +8,10 @@ public class PlayerMovement : MonoBehaviour
 
 
     private Rigidbody _rb;
-    private Animator _anim;
-
+    
     private void Awake()
     {
         _rb = GetComponent<Rigidbody>();
-        _anim = GetComponent<Animator>();
     }
 
     // Update is called once per frame

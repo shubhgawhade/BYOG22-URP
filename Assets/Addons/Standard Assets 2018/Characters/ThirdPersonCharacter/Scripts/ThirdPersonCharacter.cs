@@ -23,6 +23,7 @@ namespace UnityStandardAssets.Characters.ThirdPerson
 		public float attackDistance;
 		
 		public bool detected;
+		public bool ded;
 		
 		[SerializeField] float m_MovingTurnSpeed = 360;
 		[SerializeField] float m_StationaryTurnSpeed = 180;
@@ -71,6 +72,11 @@ namespace UnityStandardAssets.Characters.ThirdPerson
 
 		private void Update()
 		{
+			if (ded)
+			{
+				m_Animator.SetTrigger("Dead");
+			}
+			
 			if (gameObject.CompareTag("Enemy"))
 			{
 				Vector3 dir = transform.position - player.transform.position;
@@ -98,7 +104,7 @@ namespace UnityStandardAssets.Characters.ThirdPerson
 					}
 				}
 				
-				if (Mathf.Abs(dir.magnitude) < attackDistance)
+				if (Mathf.Abs(dir.magnitude) < attackDistance && detected)
 				{
 					m_Animator.SetBool("Attack", true);
 					StartCoroutine(Wait(0));
