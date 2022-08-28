@@ -8,12 +8,27 @@ ModelImporter:
       type: UnityEngine:Material
       assembly: UnityEngine.CoreModule
       name: _Body_Mid
-    second: {fileID: 2100000, guid: 55289cc4dbdc7fc408e56d8cc9041b01, type: 2}
+    second: {fileID: 2100000, guid: f4589f80bc3358649bbc3e908772f02f, type: 2}
   - first:
       type: UnityEngine:Material
       assembly: UnityEngine.CoreModule
       name: _Eye_trans
-    second: {fileID: 2100000, guid: b2feb7b20affcac4f8656c32778f0f2a, type: 2}
+    second: {fileID: 2100000, guid: ecc504b393d50034aac7c72d0e0001d7, type: 2}
+  - first:
+      type: UnityEngine:Texture2D
+      assembly: UnityEngine.CoreModule
+      name: Female1_color
+    second: {fileID: 2800000, guid: 378b61e8a4ccb5f4ba1d973c716da871, type: 3}
+  - first:
+      type: UnityEngine:Texture2D
+      assembly: UnityEngine.CoreModule
+      name: Female1_mid_nm
+    second: {fileID: 2800000, guid: 54c23b1f1a0cc7541b4a3d4bb1b0776b, type: 3}
+  - first:
+      type: UnityEngine:Texture2D
+      assembly: UnityEngine.CoreModule
+      name: Female1_spec
+    second: {fileID: 2800000, guid: 0f75be09908ec0f43abc569848511f7f, type: 3}
   materials:
     materialImportMode: 2
     materialName: 0

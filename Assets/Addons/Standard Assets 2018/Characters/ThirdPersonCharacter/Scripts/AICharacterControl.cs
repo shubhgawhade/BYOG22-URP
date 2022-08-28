@@ -56,7 +56,11 @@ namespace UnityStandardAssets.Characters.ThirdPerson
                 ChooseTarget();
             }
 
-            if (Mathf.Abs((transform.position - target.transform.position).magnitude) > 0.1f)
+            if (Mathf.Abs((transform.position - target.transform.position).magnitude) > 2f)
+            {
+                character.Move(agent.desiredVelocity, false, false);
+            }
+            else if (Mathf.Abs((transform.position - target.transform.position).magnitude) > 0.1f && target.gameObject == aic.player)
             {
                 if (!anim.GetBool("Attack") && !cooldown)
                 {
