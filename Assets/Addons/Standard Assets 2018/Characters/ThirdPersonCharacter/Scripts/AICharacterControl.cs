@@ -1,4 +1,5 @@
 using System;
+using System.Collections;
 using UnityEngine;
 using Random = UnityEngine.Random;
 
@@ -10,6 +11,8 @@ namespace UnityStandardAssets.Characters.ThirdPerson
     {
         [SerializeField] private GameObject aiController;
 
+
+        private Animator anim;
         
         public UnityEngine.AI.NavMeshAgent agent { get; private set; }             // the navmesh agent required for the path finding
         public ThirdPersonCharacter character { get; private set; } // the character we are controlling
@@ -24,9 +27,12 @@ namespace UnityStandardAssets.Characters.ThirdPerson
 
         public bool patrol;
         public bool chase;
+        private bool cooldown;
         
         private void Start()
         {
+            anim = GetComponent<Animator>();
+            
             aic = aiController.GetComponent<AIController>(); 
             tpc = GetComponent<ThirdPersonCharacter>();
             
@@ -50,9 +56,19 @@ namespace UnityStandardAssets.Characters.ThirdPerson
                 ChooseTarget();
             }
 
-            if (Mathf.Abs((transform.position - target.transform.position).magnitude) > 2)
+            if (Mathf.Abs((transform.position - target.transform.position).magnitude) > 0.1f)
             {
-                character.Move(agent.desiredVelocity, false, false);
+                if (!anim.GetBool("Attack") && !cooldown)
+                {
+                    character.Move(agent.desiredVelocity, false, false);
+                }
+                else
+                {
+                    cooldown = true;
+                    target = transform;
+
+                    StartCoroutine(A());
+                }
             }
             else
             {
@@ -60,7 +76,14 @@ namespace UnityStandardAssets.Characters.ThirdPerson
                 patrol = false;
                 ChooseTarget();
             }
-            
+
+
+            IEnumerator A()
+            {
+                yield return new WaitForSeconds(1.5f);
+
+                cooldown = false;
+            }
             
             
             if (!tpc.detected)
@@ -69,14 +92,17 @@ namespace UnityStandardAssets.Characters.ThirdPerson
             }
             else
             {
-                patrol = false;
-                SetTarget(aic.player.transform);
+                if (!cooldown)
+                {
+                    patrol = false;
+                    SetTarget(aic.player.transform);
+                }
             }
         }
 
         private void ChooseTarget()
         {
-            if (!patrol)
+            if (!patrol && !cooldown)
             {
                 do
                 {

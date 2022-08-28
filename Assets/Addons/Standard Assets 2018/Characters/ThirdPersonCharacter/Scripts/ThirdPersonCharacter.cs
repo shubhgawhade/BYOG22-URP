@@ -1,4 +1,5 @@
 using System;
+using System.Collections;
 using UnityEngine;
 
 namespace UnityStandardAssets.Characters.ThirdPerson
@@ -19,6 +20,7 @@ namespace UnityStandardAssets.Characters.ThirdPerson
 
 		public float maxPlayerDistance;
 		public float chargeDistance;
+		public float attackDistance;
 		
 		public bool detected;
 		
@@ -47,6 +49,7 @@ namespace UnityStandardAssets.Characters.ThirdPerson
 		private Ray ray;
 		private RaycastHit hit;
 
+		
 		void Start()
 		{
 			if (gameObject.CompareTag("Enemy"))
@@ -80,11 +83,11 @@ namespace UnityStandardAssets.Characters.ThirdPerson
 				}
 				else if (slc.isOn && Mathf.Abs(dir.magnitude) < chargeDistance)
 				{
-					print("SPOTLIGHT : " + slc.isOn);
+					// print("SPOTLIGHT : " + slc.isOn);
 					
 					if (Physics.Raycast(transform.position, player.transform.position, out hit))
 					{
-						print("LOOK DIR : " + Vector3.Dot(player.transform.forward.normalized, dir.normalized));
+						// print("LOOK DIR : " + Vector3.Dot(player.transform.forward.normalized, dir.normalized));
 						
 						if (Vector3.Dot(player.transform.forward.normalized, dir.normalized) > 0.9f)
 						{
@@ -94,7 +97,26 @@ namespace UnityStandardAssets.Characters.ThirdPerson
 						}
 					}
 				}
+				
+				if (Mathf.Abs(dir.magnitude) < attackDistance)
+				{
+					m_Animator.SetBool("Attack", true);
+					StartCoroutine(Wait(0));
+				}
 			}
+		}
+
+		IEnumerator Wait(int a)
+		{
+			switch (a)
+			{
+				case 0:
+					yield return new WaitForSeconds(0.2f);
+					m_Animator.SetBool("Attack", false);
+					
+					break;
+			}
+			
 		}
 
 
