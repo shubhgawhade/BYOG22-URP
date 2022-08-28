@@ -107,6 +107,8 @@ namespace UnityStandardAssets.Characters.ThirdPerson
 				if (Mathf.Abs(dir.magnitude) < attackDistance && detected)
 				{
 					m_Animator.SetBool("Attack", true);
+					
+					// SUBTRACT PLAYER HEALTH HERE
 					StartCoroutine(Wait(0));
 				}
 			}
