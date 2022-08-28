@@ -1,20 +1,27 @@
 using System.Collections;
 using System.Collections.Generic;
+using TMPro;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class GameManager : MonoBehaviour
 {
-    public static float MouseSensitivity;
+    [SerializeField] private Slider sens;
+    [SerializeField] private TextMeshProUGUI sensitivity;
+    
+    public static float MouseSensitivity = 50;
 
     // Start is called before the first frame update
     void Start()
     {
+        DontDestroyOnLoad(gameObject);
         
+        sens.value = MouseSensitivity;
     }
 
-    // Update is called once per frame
-    void Update()
+    public void SensUpdate()
     {
-        
+        sensitivity.text = sens.value.ToString();
+        MouseSensitivity = sens.value;
     }
 }
